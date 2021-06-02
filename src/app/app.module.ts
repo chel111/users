@@ -5,7 +5,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TableComponent } from './components/table/table.component';
 import { FormsModule } from '@angular/forms';
-import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { HttpClientModule } from '@angular/common/http';
+
 
 @NgModule({
   declarations: [
@@ -16,7 +17,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    NgMultiSelectDropDownModule.forRoot()
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

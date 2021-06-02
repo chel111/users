@@ -14,7 +14,7 @@ export class TableComponent implements OnInit {
   tableName: string = "Users";
   users: User[];
   virtualTables: VirtualTable[];
-  creatingNewTable: boolean = true;
+  creatingNewTable: boolean = false;
   filters: Filter[] = new Array()
   availableFields: string[] = new Array();
   addBranch: boolean = false;
@@ -22,8 +22,8 @@ export class TableComponent implements OnInit {
   @ViewChild("tableNameInput") tableNameInput: ElementRef;
 
   constructor(private tableService: TableService) {
-    this.users = tableService.getUsers();
-    this.virtualTables = tableService.getVirtualTables();
+    tableService.getUsers().subscribe(users => this.users = users);
+    this.getVirtualTables();
     for (let field in new User()) {
       this.availableFields.push(field);
     }
@@ -32,13 +32,17 @@ export class TableComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  deleteVirtualTable(id: number) {
-    console.log("deleting virtual table with id = ", id);
+  getVirtualTables(): void {
+    this.tableService.getVirtualTables().subscribe(tables => this.virtualTables = tables);
   }
 
-  selectVirtualTable(name: string) {
-    this.users = this.tableService.selectVirtualTable(name);
-    this.tableName = name;
+  deleteVirtualTable(id: number) {
+    this.tableService.deleteVirtualTable(id).subscribe(_ => this.getVirtualTables());
+  }
+
+  selectVirtualTable(table: VirtualTable) {
+    this.tableService.getVirtualTable(table.id).subscribe(users => this.users = users);
+    this.tableName = table.name;
   }
 
   addNewFilter() {
@@ -60,5 +64,4 @@ export class TableComponent implements OnInit {
 
     this.tableService.saveNewTable(tableName, this.filters, selectedFilials);
   }
-
 }

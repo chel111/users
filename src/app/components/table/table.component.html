@@ -19,7 +19,7 @@
 </table>
 
 <div class="virtual-tables">
-  <div *ngFor="let virtualTable of virtualTables" class="virtual-tables-names" (click)="selectVirtualTable(virtualTable.name)">
+  <div *ngFor="let virtualTable of virtualTables" class="virtual-tables-names" (click)="selectVirtualTable(virtualTable)">
     {{virtualTable.name}}
     <div class="close-icon" (click)="deleteVirtualTable(virtualTable.id)">X</div>
   </div>

@@ -2,49 +2,38 @@ import { Injectable } from '@angular/core';
 import { Filter } from '../entities/filter';
 import { User } from '../entities/user';
 import { VirtualTable } from '../entities/virtual.table';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TableService {
+  hostUrl: string = 'https://localhost:4444/api/car'
 
-  constructor() { }
+  constructor(
+    private http: HttpClient
+  ) { }
 
-  getUsers(): User[] {
-    return [
-      //new User(1, "Alex", "Bulkin", 23, "bulkin@urk.net", false),
-      //new User(2, "John", "Cooper", 23, "Cooper@urk.net", false),
-      //new User(3, "Cody", "Williams", 23, "Williams@urk.net", false),
-      //new User(4, "Lauren", "Brown", 23, "Brown@urk.net", false),
-      //new User(5, "Gregory", "Buxton", 23, "Buxton@urk.net", false),
-      //new User(6, "Liza", "Mansel", 23, "Mansel@urk.net", false),
-      //new User(7, "Sheldon", "Prost", 23, "Prost@urk.net", false),
-      //new User(8, "Melissa", "Hammilton", 23, "Hammilton@urk.net", true),
-      //new User(9, "George", "Rosberg", 23, "Rosberg@urk.net", true),
-      //new User(10, "Mary", "Vettel", 23, "Vettel@urk.net", true),
-    ]
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.hostUrl}`);
   }
 
-  getVirtualTables(): VirtualTable[] {
-    return [
-      new VirtualTable(1, "testTable1"),
-      new VirtualTable(2, "testTable2"),
-      new VirtualTable(3, "testTable3")
-    ]
+  getVirtualTables(): Observable<VirtualTable[]> {
+    return this.http.get<VirtualTable[]>(`${this.hostUrl}/virtualTables`);
   }
 
-  selectVirtualTable(name: string): User[] {
-    console.log("selecting virtual table")
-    return [
-      new User(),
-      new User(),
-      new User(),
-    ]
+  getVirtualTable(id: number): Observable<User[]> {
+    return this.http.get<User[]>(`${this.hostUrl}/virtualTables/${id}`);
   }
 
-  saveNewTable(name: string, filters: Filter[], selectedFilials: string[]): VirtualTable {
-    var json = this.generateJson(name, filters, selectedFilials)
-    return new VirtualTable(0, '');
+  saveNewTable(name: string, filters: Filter[], selectedFilials: string[]): Observable<VirtualTable> {
+    var json = this.generateJson(name, filters, selectedFilials);
+    return this.http.post<VirtualTable>(`${this.hostUrl}/virtualTables`, json);
+  }
+
+  deleteVirtualTable(id: number): Observable<any> {
+    return this.http.delete(`${this.hostUrl}/virtualTables/${id}`);
   }
 
   private generateJson(name: string, filters: Filter[], selectedFilials: string[]): string {
@@ -53,7 +42,6 @@ export class TableService {
       filters: JSON.stringify(filters),
       filials: selectedFilials
     }
-    console.log(JSON.stringify(table));
-    return "";
+    return JSON.stringify(table);
   }
 }
