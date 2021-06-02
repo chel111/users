@@ -23,7 +23,7 @@
     {{virtualTable.name}}
     <div class="close-icon" (click)="deleteVirtualTable(virtualTable.id)">X</div>
   </div>
-  <div class="virtual-tables-names" (click)="creatingNewTable = !creatingNewTable; filters = []">Create New Virtual Table</div>
+  <div class="virtual-tables-create" (click)="creatingNewTable = !creatingNewTable; filters = []">Create New Virtual Table</div>
 
   <div *ngIf="creatingNewTable" class="constructor">
     <label>Table Name:</label><br />
